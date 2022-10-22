@@ -1,3 +1,7 @@
 .replit
 replit.nix
 run.fth
+
+.DS_Store
+old/
+
