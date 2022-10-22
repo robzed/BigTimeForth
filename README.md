@@ -2,6 +2,8 @@
 Forth code for the BigTime watch
 Written by Rob Probin
 
+** WORK IN PROGRESS ** 
+
 ## Overview
 
 Rather than a fixed binary blob built from C, how about a fully interactive runtime on your watch, while still having long battery lifetime? 
@@ -25,9 +27,11 @@ Some links to Data:
 * Schematic http://cdn.sparkfun.com/datasheets/Kits/BigTime.pdf
 * Eagle files http://cdn.sparkfun.com/datasheets/Kits/BigTime.zip
 * Microcontroller (ATMega328P) data sheet http://cdn.sparkfun.com/datasheets/Kits/doc8161.pdf
-* Construction guide cdn.sparkfun.com/datasheets/Kits/SFE03-0010-Packaging-Kitcard-BigTime-rev4-05.pdf
+* Construction guide http://cdn.sparkfun.com/datasheets/Kits/SFE03-0010-Packaging-Kitcard-BigTime-rev4-05.pdf
 
 
 ## License
 
-MIT license - see LICENSE text file. 
+Software is released under the MIT license - see LICENSE text file. 
+The hardware design is released under CC-SA v3 license (see README in Hardware directory).
+
