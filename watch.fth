@@ -98,17 +98,18 @@ PORTD 2 bit defPIN: button
 : seg|.| 5 ; 
 : seg|_  6 ;
 : seg|_| 7 ;
-: seg>n rot 0<> if 64 then + swap 8 * + ;
+: seg>n rot 0<> if 64 else 0 then + swap 8 * + ;
 
 
 \ numbers - 0123456789
 create seg_numbers
+
 seg._ 
 seg|.|
-seg|_| seg>n ,
+seg|_|  seg>n  , 
 seg
 seg..|
-seg..| seg>n ,
+seg..|  seg>n  , 
 seg._ 
 seg._|
 seg|_  seg>n ,
@@ -146,7 +147,7 @@ seg|_|
 seg|.| seg>n ,
 seg._
 seg._|
-seg|_|
+seg|_| seg>n ,
 0 , \ no B
 seg 
 seg|_
@@ -156,9 +157,9 @@ seg|
 seg|_ seg>n ,
 seg
 seg._
-seg|_ seg>n m
+seg|_ seg>n ,
 seg 
-seg _|
+seg._|
 seg|_| seg>n ,
 0 , \ no D
 seg._ 
@@ -180,7 +181,7 @@ seg|_|
 seg|.| seg>n ,
 seg  
 seg|_ 
-seg| | seg>n ,
+seg|.| seg>n ,
 seg 
 seg| 
 seg|   seg>n , 
@@ -203,7 +204,7 @@ seg|_ seg>n ,
 0 ,   \ no l
 seg._ \ M is impossible
 seg._
-seg._
+seg._ seg>n ,
 0 ,   \ no m
 0 ,   \ no N
 seg
@@ -218,11 +219,11 @@ seg|_| seg>n ,
 seg._
 seg|_|
 seg|   seg>n ,
-0 , no Q
+0 , \ no Q
 seg._
 seg|_|
 seg..| seg>n ,
-0 , no R
+0 , \ no R
 seg
 seg._
 seg|   seg>n ,
@@ -251,8 +252,8 @@ seg._
 seg._ seg>n ,
 0 , \ no w
 seg    \ X is impossible
-seg| |
-seg| | seg>n ,
+seg|.|
+seg|.| seg>n ,
 0 , \ no x
 0 , \ no Y
 seg
@@ -260,7 +261,7 @@ seg|_|
 seg._| seg>n ,
 seg._  \ Z is impossible
 seg._
-seg._
+seg._ seg>n ,
 0 , \ no z
 
 : (segaddr) ( 0>=n<26 -- addr )
@@ -268,7 +269,7 @@ seg._
 ;
 
 : (segletter) ( 0>=n<26 -- upper lower )
-  (segaddr) dup @ swap 1+ @
+  (segaddr) dup @ swap CELL+ @
 ;
 
 : seglower ( a>=n<=z -- m )
@@ -289,7 +290,7 @@ seg._
 seg   seg>n constant seg_dash
 
 : isdigit ( char -- flag )
-  0 10 within
+  [char] 0 [char] 9 1+ within
 ;
 : isupper ( char -- flag )
   [char] A [char] Z 1+ within
@@ -302,8 +303,8 @@ seg   seg>n constant seg_dash
   dup isdigit if [char] 0 - segdigit exit then
   dup isupper if segupper exit then
   dup islower if seglower exit then
-  dup [char] '-' if drop seg_dash exit then
-  dup [char] '_' if drop seg_underscore exit then
+  dup [char] - = if drop seg_dash exit then
+  dup [char] _ = if drop seg_underscore exit then
   drop 0
 ;
 
@@ -314,13 +315,13 @@ seg   seg>n constant seg_dash
 
 : setIO ( flag port -- ) swap if high else low then ;
 : setsegIO ( n -- )
-  dup 1 and segC setIO then
-  dup 2 and segD setIO then
-  dup 4 and segE setIO then
-  dup 8 and segB setIO then
-  dup 16 and segG setIO then
-  dup 32 and segF setIO then
-      64 and segA setIO then
+  dup 1 and segC setIO 
+  dup 2 and segD setIO 
+  dup 4 and segE setIO 
+  dup 8 and segB setIO
+  dup 16 and segG setIO
+  dup 32 and segF setIO
+      64 and segA setIO
 ;
 
 : turn_off_digitIO ( -- )
@@ -347,7 +348,7 @@ seg   seg>n constant seg_dash
 : (show4) ( am/pm-flag colon-flag c-addr -- )
   turn_off_digitIO
   4 for
-    dup c@ getsegchar setsetIO
+    dup c@ getsegchar setIO
 	r@ 3 = if swap colon setIO then
 	r@ 2 = if swap am/pm setIO then
 	4 r@ - setdigitIO 
